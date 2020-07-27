@@ -1,0 +1,35 @@
+form{
+    width: 70%;
+    margin: auto;
+}
+.row{
+    margin-bottom: 10px;
+}
+.bt{
+    float: right;
+    margin: 20px;
+}
+.img{
+    position: relative;
+    padding: unset;
+}
+.img > input{
+    width: 100%;
+}
+.img-bt{
+    position: absolute;
+    top: 2.5px;
+    height: 86%;
+    border-radius: 3px;
+    border: unset;
+}
+.left{
+    left: 17px;
+}
+.right{
+    right: 17px;
+}
+::-webkit-file-upload-button {
+    border-radius: 3px;
+    border: unset;
+}

@@ -1,0 +1,11 @@
+.form{
+    width: 70%;
+    margin: 30px auto 0;
+}
+.row{
+    margin-bottom: 10px;
+}
+.bt{
+    float: right;
+    margin: 20px;
+}

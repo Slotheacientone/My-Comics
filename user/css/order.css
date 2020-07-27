@@ -1,0 +1,124 @@
+.order-progress{
+    margin: auto;
+    width: 80%;
+    height: 50px;
+    position: relative;
+}
+.progress-step{
+    padding: unset;
+}
+.progress-dot{
+    height: 30px;
+    width: 30px;
+    border: 1px solid #b9b9b9;
+    background: white;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 18px;
+    position: absolute;
+    top: 30px;
+    left: 46%;
+}
+.progress-line{
+    height: 4px;
+    margin: 22px 0;
+    background: #b9b9b9;
+    position: relative;
+}
+.progress-complete{
+    background: #FFC229;
+    height: 4px;
+    width: 0;
+}
+.progress-step:first-child > .progress-line{
+    left: 50%;
+    width: 50%;
+}
+.progress-step:last-child > .progress-line{
+    width: 50%;
+}
+.progress-stepnum{
+    text-align: center;
+}
+.order-form-grids{
+    background: #F7F7F9;
+    margin: 3em auto 0;
+    border-radius: 5px;
+}
+.pp-img{
+    width: 100%;
+}
+.order .container{
+    margin: 5em auto 5em;
+}
+.payment-form-grids{
+    padding: 3em;
+    margin: 1em auto 0;
+}
+.order h3{
+    margin: 3em 0 0;
+}
+.order-progress .complete > .progress-dot{
+    background: #FFC229;
+    color: white;
+    border: 1px solid #FFC229;
+}
+.order-progress .complete .progress-complete{
+    width: 100%;
+}
+.order-progress .active .progress-complete{
+    width: 50%;
+}
+.progress-step:last-child.active .progress-complete{
+    width: 100%;
+}
+/**/
+
+.checkout-basket a {
+    color: #000000;
+    font-size: 23px;
+    text-decoration: none;
+    float: right;
+}
+.check-box{
+    width: 20%;
+    margin: 5em auto 0;
+    position: relative;
+}
+.form-button{
+    outline: none;
+    border: 1px solid #ffc229;
+    background: #ffc229;
+    font-size: 1em;
+    color: #fff;
+    padding: 10px 30px;
+    border-radius: 5px;
+}
+.form-button-default{
+    border: 1px solid lightgrey;
+    font-size: 1em;
+    color: black;
+    padding: 10px 30px;
+    border-radius: 5px;
+    background: lightgrey;
+}
+.form-button:hover {
+    background: #d8703f;
+    border: 1px solid #d8703f;
+}
+.form-button-default:hover{
+    background: #FFFFFF;
+}
+.checkout-left-basket input[type="submit"]{
+    width: 100%;
+}
+.row{
+    margin-bottom: 10px;
+}
+.available-address{
+    border: 2px dashed lightgrey;
+    margin: 1em 0;
+    padding: 1em;
+}
+
+

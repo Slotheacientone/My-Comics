@@ -27,6 +27,15 @@ public class User implements Serializable {
     @Column(name = "verified", nullable = false)
     private boolean verified;
 
+    public User(String email, String password, String role, String username, boolean verified) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.username = username;
+        this.verified = verified;
+    }
+
+    public User(){}
 
     public String getEmail() {
         return email;

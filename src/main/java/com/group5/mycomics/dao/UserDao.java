@@ -17,7 +17,7 @@ public class UserDao {
 
     public User findUser(String email){
         try {
-            String sql = "SELECT u FROM user u where u.email= :email";
+            String sql = "SELECT u FROM User u where u.email= :email";
             Query query = entityManager.createQuery(sql, User.class);
             query.setParameter("email", email);
             return (User) query.getSingleResult();

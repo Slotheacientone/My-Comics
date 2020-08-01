@@ -18,11 +18,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(12);
     }
 
     @Autowired
-    public void globalConfigure(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
@@ -32,6 +32,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/user").access("hasAnyRole('ROLE_USER','ROLE_ADMIN')");
         http.authorizeRequests().antMatchers("/admin").access("hasAnyRole('ROLE_ADMIN')");
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/admin/403.html");
-        http.authorizeRequests().and().formLogin().loginPage("/login.html").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/index.html").passwordParameter("password").usernameParameter("email");
+        http.authorizeRequests().and().formLogin().loginPage("/login.html").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/index.html").failureUrl("/login-failed.html").passwordParameter("password").usernameParameter("email");
     }
 }

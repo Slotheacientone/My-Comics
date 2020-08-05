@@ -34,4 +34,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/admin/403.html");
         http.authorizeRequests().and().formLogin().loginPage("/login.html").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/index.html").failureUrl("/login-failed.html").passwordParameter("password").usernameParameter("email");
     }
+
 }

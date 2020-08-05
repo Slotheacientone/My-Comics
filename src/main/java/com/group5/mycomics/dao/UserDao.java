@@ -13,9 +13,9 @@ import javax.transaction.Transactional;
 @Transactional
 public class UserDao {
     @Autowired
-    private EntityManager entityManager;
+    private static EntityManager entityManager;
 
-    public User findUser(String email){
+    public static User findUser(String email){
         try {
             String sql = "SELECT u FROM User u where u.email= :email";
             Query query = entityManager.createQuery(sql, User.class);
@@ -25,4 +25,11 @@ public class UserDao {
             return null;
         }
     }
+
+    public static boolean addUser(User user){
+        entityManager.persist(user);
+        return true;
+    }
+
+
 }

@@ -47,11 +47,12 @@ public class UserController {
         return "user/forgot-password";
     }
 
-    @RequestMapping(value = "/forgot-password", method = RequestMethod.POST)
+    @RequestMapping(value = "/forgot-password-servlet", method = RequestMethod.POST)
     public String forgotPassword(HttpServletRequest request) {
         String email = request.getParameter("email");
        if(userService.checkUserExist(email)) {
            String pwd = RandomStringUtils.randomAscii(15, 25);
+           System.out.println("run controller with password: " + pwd);
            userService.sendForgotPasswordEmail(email, pwd);
            userService.changePassword(email, pwd);
            return "login.html";

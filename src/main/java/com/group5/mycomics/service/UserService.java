@@ -47,6 +47,7 @@ public class UserService implements UserDetailsService {
         mailMessage.setSubject("Your new password");
         mailMessage.setFrom("<MAIL>");
         mailMessage.setText("Your new random password: " + password);
+        System.out.println("run send forgot password");
         mailService.sendEmail(mailMessage);
     }
 

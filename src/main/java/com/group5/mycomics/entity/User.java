@@ -24,15 +24,12 @@ public class User implements Serializable {
     @Column(name = "username", nullable = false, length = 45)
     private String username;
 
-    @Column(name = "verified", nullable = false)
-    private boolean verified;
 
-    public User(String email, String password, String role, String username, boolean verified) {
+    public User(String email, String password, String role, String username) {
         this.email = email;
         this.password = password;
         this.role = role;
         this.username = username;
-        this.verified = verified;
     }
 
     public User(){}
@@ -53,10 +50,6 @@ public class User implements Serializable {
         return username;
     }
 
-    public boolean isVerified() {
-        return verified;
-    }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -71,9 +64,5 @@ public class User implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public void setVerified(boolean verified) {
-        this.verified = verified;
     }
 }

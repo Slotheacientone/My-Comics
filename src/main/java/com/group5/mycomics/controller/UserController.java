@@ -8,6 +8,7 @@ import com.group5.mycomics.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.Enumeration;
+import java.util.stream.Stream;
 
 @Controller
 public class UserController {
@@ -27,6 +34,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private Environment environment;
 
     @RequestMapping(value = "/index.html")
     public String index() {
@@ -46,6 +56,11 @@ public class UserController {
     @RequestMapping(value = "/forgot-password.html")
     public String forgotPasswordPage() {
         return "user/forgot-password";
+    }
+
+    @RequestMapping(value = "/login-failed.html")
+    public String loginFailed(){
+        return "user/login-failed";
     }
 
     @RequestMapping(value = "/forgot-password-servlet", method = RequestMethod.POST)
@@ -76,7 +91,7 @@ public class UserController {
             BCryptPasswordEncoder crypt = new BCryptPasswordEncoder(12);
             String pwdEncode = crypt.encode(pwd);
             String role = "ROLE_USER";
-            User u = new User(email,pwdEncode,role,userFb.getName(),true);
+            User u = new User(email,pwdEncode,role,userFb.getName());
             userDao.addUser(u);
         }
         return "redirect:/";

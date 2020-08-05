@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>My Comics</title>
     <!-- for-mobile-apps -->
@@ -163,24 +163,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <div class="container">
         <h3 class="animated wow zoomIn" data-wow-delay=".5s">Register Here</h3>
         <div class="login-form-grids">
-            <h5 class="animated wow slideInUp" data-wow-delay=".5s">profile information</h5>
-            <form class="animated wow slideInUp" data-wow-delay=".5s">
-                <input type="text" placeholder="Name..." required="">
-                <input type="tel" placeholder="Phone number *" required="">
-				<input id="sendCode-bt" type="button" value="Send code">
-				<input type="text" placeholder="Verification code *" required=" ">
-            </form>
             <h6 class="animated wow slideInUp" data-wow-delay=".5s">Login information</h6>
-            <form class="animated wow slideInUp" data-wow-delay=".5s">
-                <input type="email" placeholder="Email Address *" required=" ">
-                <input type="password" placeholder="Password *" required=" ">
-                <input type="password" placeholder="Password Confirmation *" required=" ">
-                <div class="register-check-box">
-                    <div class="check">
-                        <label class="checkbox"><input type="checkbox" name="checkbox"><i> </i>I accept the terms and
-                            conditions</label>
-                    </div>
-                </div>
+            <form th:action="@{/register-servlet}" method="post" class="animated wow slideInUp" data-wow-delay=".5s">
+                <input name="name" type="text" placeholder="Name..." required="">
+                <input name="email" type="email" placeholder="Email Address *" required=" ">
+                <input name ="password" type="password" placeholder="Password *" id="password" required=" ">
+                <input type="password" placeholder="Password Confirmation *"  id="confirm_password" required=" ">
                 <input type="submit" value="Register">
             </form>
             <h6 class="animated wow slideInUp" data-wow-delay=".5s">Or</h6>
@@ -285,7 +273,29 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <h2><a href="index.html">My Comics <span>read anywhere</span></a></h2>
         </div>
     </div>
+
+
 </div>
 <!-- //footer -->
+
+<script>
+var password = document.getElementById("password")
+, confirm_password = document.getElementById("confirm_password");
+
+function validatePassword(){
+if(password.value != confirm_password.value) {
+confirm_password.setCustomValidity("Passwords Don't Match");
+} else {
+confirm_password.setCustomValidity('');
+}
+}
+password.onchange = validatePassword;
+confirm_password.onkeyup = validatePassword;
+</script>
 </body>
+
+
 </html>
+
+
+

@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -49,6 +50,17 @@ public class UserService implements UserDetailsService {
         mailMessage.setText("Your new random password: " + password);
         System.out.println("run send forgot password");
         mailService.sendEmail(mailMessage);
+    }
+
+    public void addUser(User user){
+        BCryptPasswordEncoder crypt = new BCryptPasswordEncoder(12);
+        String pwdEncode = crypt.encode(user.getPassword());
+        user.setPassword(pwdEncode);
+        userDao.addUser(user);
+    }
+
+    public User findUser(String email){
+        return userDao.findUser(email);
     }
 
     public void changePassword(String email, String password){

@@ -62,9 +62,10 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             </div>
             <div class="header-grid-right animated wow slideInRight" data-wow-delay=".5s">
                 <ul class="login-register">
-                    <li><i class="glyphicon glyphicon-log-in" aria-hidden="true"></i><a href="login.html">Login</a></li>
-                    <li><i class="glyphicon glyphicon-book" aria-hidden="true"></i><a href="register.html">Register</a>
-                    </li>
+                    <li th:if="${session.name == null}"><i class="glyphicon glyphicon-log-in" aria-hidden="true"></i><a href="login.html">Login</a></li>
+                    <li th:if="${session.name == null}"><i class="glyphicon glyphicon-book" aria-hidden="true"></i><a href="register.html">Register</a></li>
+                    <li th:if="${session.name != null}"><i class="glyphicon glyphicon-book" aria-hidden="true"></i><a href="register.html" th:text="${session.name}"></a></li>
+                    <li th:if="${session.name != null}"><i class="glyphicon glyphicon-book" aria-hidden="true"></i><a href="#">Logout</a></li>
                 </ul>
             </div>
             <div class="clearfix"></div>

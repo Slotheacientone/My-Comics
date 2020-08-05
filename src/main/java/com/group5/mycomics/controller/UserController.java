@@ -31,6 +31,12 @@ public class UserController {
 
     @RequestMapping(value = {"/", "/index.html"})
     public String index(HttpSession session, Principal principal) {
+        if(principal != null){
+            System.out.println("11111111");
+            User user = userService.findUser(principal.getName());
+            session.setAttribute("name",user.getUsername());
+        }
+
         return "user/index";
     }
 
@@ -74,7 +80,7 @@ public class UserController {
         String code = RandomStringUtils.randomAlphanumeric(6);
 
         //send mail here
-
+        System.out.println(code);
 
         maps.put(email, code);
         session.setAttribute("email", email);
@@ -85,12 +91,14 @@ public class UserController {
     }
 
     @RequestMapping(value = "/verify-servlet", method = RequestMethod.POST)
-    public String verify(@RequestParam("verify-code") String code, @RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("name") String name) {
+    public String verify(@RequestParam("verify-code") String code, @RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("name") String name,HttpSession session) {
         if (!maps.get(email).contentEquals(code)) {
+            session.setAttribute("error","wrong code");
             return "user/verify.html";
         }
         User user = new User(email, password, "ROLE_USER", name);
         userService.addUser(user);
+
         return "redirect:/";
     }
 

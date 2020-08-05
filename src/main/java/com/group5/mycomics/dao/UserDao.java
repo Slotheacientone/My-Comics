@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.FlushModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
@@ -13,9 +14,9 @@ import javax.transaction.Transactional;
 @Transactional
 public class UserDao {
     @Autowired
-    private static EntityManager entityManager;
+    private EntityManager entityManager;
 
-    public static User findUser(String email){
+    public User findUser(String email){
         try {
             String sql = "SELECT u FROM User u where u.email= :email";
             Query query = entityManager.createQuery(sql, User.class);
@@ -26,10 +27,17 @@ public class UserDao {
         }
     }
 
-    public static boolean addUser(User user){
+    public void updateUserPassword(String email, String password){
+        String sql = "UPDATE User u SET u.password=:password WHERE email=:email";
+        Query query = entityManager.createQuery(sql,User.class);
+        query.setFlushMode(FlushModeType.AUTO);
+        query.setParameter("password", password);
+        query.setParameter("email",email);
+        query.executeUpdate();
+    }
+
+    public boolean addUser(User user){
         entityManager.persist(user);
         return true;
     }
-
-
 }

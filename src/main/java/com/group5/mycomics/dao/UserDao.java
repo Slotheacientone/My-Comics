@@ -36,8 +36,7 @@ public class UserDao {
         query.executeUpdate();
     }
 
-    public boolean addUser(User user){
+    public void addUser(User user){
         entityManager.persist(user);
-        return true;
     }
 }

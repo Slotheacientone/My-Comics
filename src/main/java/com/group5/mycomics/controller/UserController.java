@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -27,7 +28,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/index.html")
+    @RequestMapping(value = "/")
     public String index() {
         return "user/index";
     }
@@ -42,22 +43,22 @@ public class UserController {
         return "user/register";
     }
 
-    @RequestMapping(value = "forgot-password.html")
+    @RequestMapping(value = "/forgot-password.html")
     public String forgotPasswordPage() {
         return "user/forgot-password";
     }
 
     @RequestMapping(value = "/forgot-password-servlet", method = RequestMethod.POST)
-    public String forgotPassword(HttpServletRequest request) {
-        String email = request.getParameter("email");
+    public String forgotPassword(@RequestParam("email") String email) {
+        System.out.println(email);
        if(userService.checkUserExist(email)) {
            String pwd = RandomStringUtils.randomAscii(15, 25);
            System.out.println("run controller with password: " + pwd);
            userService.sendForgotPasswordEmail(email, pwd);
            userService.changePassword(email, pwd);
-           return "login.html";
+           return "/user/login.html";
        }
-       return "forgot-password.html";
+       return "/user/forgot-password.html";
     }
 
     @RequestMapping("/login-facebook")
@@ -69,11 +70,11 @@ public class UserController {
         String accessToken = restFb.getToken(code);
         com.restfb.types.User userFb = restFb.getUserInfo(accessToken);
 
-
-        if (userService.checkUserExist(userFb.getId()+"@gmail.com")){
+        if (!userService.checkUserExist(userFb.getId()+"@gmail.com")){
             String email = userFb.getId()+"@gmail.com";
+            String pwd = RandomStringUtils.randomAscii(25,45);
             BCryptPasswordEncoder crypt = new BCryptPasswordEncoder(12);
-            String pwdEncode = crypt.encode("22031999");
+            String pwdEncode = crypt.encode(pwd);
             String role = "ROLE_USER";
             User u = new User(email,pwdEncode,role,userFb.getName(),true);
             userDao.addUser(u);

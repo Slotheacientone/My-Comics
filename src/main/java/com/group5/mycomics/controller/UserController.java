@@ -2,13 +2,11 @@ package com.group5.mycomics.controller;
 
 import com.group5.mycomics.common.RestFB;
 import com.group5.mycomics.entity.User;
-import com.group5.mycomics.service.MailService;
 import com.group5.mycomics.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,7 +72,7 @@ public class UserController {
         String code = RandomStringUtils.randomAlphanumeric(6);
 
         //send mail here
-
+        userService.sendVerifyEmail(email, code);
 
         maps.put(email, code);
         session.setAttribute("email", email);

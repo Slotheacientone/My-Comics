@@ -52,6 +52,15 @@ public class UserService implements UserDetailsService {
         mailService.sendEmail(mailMessage);
     }
 
+    public void sendVerifyEmail(String email, String code) {
+        final SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setSubject("Your verify code");
+        mailMessage.setFrom("<MAIL>");
+        mailMessage.setText("Your verify code: " + code);
+        mailService.sendEmail(mailMessage);
+    }
+
     public void addUser(User user){
         BCryptPasswordEncoder crypt = new BCryptPasswordEncoder(12);
         String pwdEncode = crypt.encode(user.getPassword());

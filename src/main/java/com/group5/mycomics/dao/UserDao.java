@@ -2,6 +2,7 @@ package com.group5.mycomics.dao;
 
 import com.group5.mycomics.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -29,9 +30,10 @@ public class UserDao {
 
     public void updateUserPassword(String email, String password){
         String sql = "UPDATE User u SET u.password=:password WHERE email=:email";
-        Query query = entityManager.createQuery(sql,User.class);
+        Query query = entityManager.createQuery(sql);
         query.setFlushMode(FlushModeType.AUTO);
-        query.setParameter("password", password);
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
+        query.setParameter("password", bCryptPasswordEncoder.encode(password));
         query.setParameter("email",email);
         query.executeUpdate();
     }

@@ -28,7 +28,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/")
+    @RequestMapping(value = "/index.html")
     public String index() {
         return "user/index";
     }

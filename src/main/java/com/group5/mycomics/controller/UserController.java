@@ -7,6 +7,10 @@ import com.group5.mycomics.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -110,14 +114,22 @@ public class UserController {
         }
         String accessToken = restFb.getToken(code);
         com.restfb.types.User userFb = restFb.getUserInfo(accessToken);
-
+        User user = null;
         if (!userService.checkUserExist(userFb.getId() + "@gmail.com")) {
             String email = userFb.getId() + "@gmail.com";
             String pwd = RandomStringUtils.randomAscii(25, 45);
             String role = "ROLE_USER";
-            User u = new User(email, pwd, role, userFb.getName());
-            userService.addUser(u);
+            user = new User(email, pwd, role, userFb.getName());
+            userService.addUser(user);
+        }else{
+            user = userService.findUser(userFb.getId()+"@gmail.com");
         }
+
+        UserDetails userDetail = restFb.buildUser(user);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail, null,
+                userDetail.getAuthorities());
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
         return "redirect:/";
     }
 

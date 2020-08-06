@@ -39,18 +39,15 @@ public class RestFB {
         return facebookClient.fetchObject("me", com.restfb.types.User.class);
     }
 
-    public UserDetails buildUser(com.restfb.types.User user) {
+    public UserDetails buildUser(com.group5.mycomics.entity.User user) {
         boolean enabled = true;
         boolean accountNonExpired = true;
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-//        String pwd = RandomStringUtils.randomAscii(15,25);
-        String pwd = "22031999";
-        BCryptPasswordEncoder crypt = new BCryptPasswordEncoder(12);
-        String pwdEncode = crypt.encode(pwd);
-        UserDetails userDetail = new User(user.getId(), pwdEncode, enabled, accountNonExpired, credentialsNonExpired,
+
+        UserDetails userDetail = new User(user.getEmail(), user.getPassword(), enabled, accountNonExpired, credentialsNonExpired,
                 accountNonLocked, authorities);
         return userDetail;
     }

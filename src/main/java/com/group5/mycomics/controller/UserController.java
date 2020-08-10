@@ -36,11 +36,9 @@ public class UserController {
     @RequestMapping(value = {"/", "/index.html"})
     public String index(HttpSession session, Principal principal) {
         if(principal != null){
-            System.out.println("11111111");
             User user = userService.findUser(principal.getName());
-            session.setAttribute("name",user.getUsername());
+            session.setAttribute("username",user.getUsername());
         }
-
         return "user/index";
     }
 
@@ -63,6 +61,7 @@ public class UserController {
     public String forgotPasswordPage() {
         return "user/forgot-password";
     }
+
 
     @RequestMapping(value = "/forgot-password-servlet", method = RequestMethod.POST)
     public String forgotPassword(@RequestParam("email") String email) {

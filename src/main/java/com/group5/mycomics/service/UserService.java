@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
         User user = userDao.findUser(email);
         return user != null;
     }
-
+//send simple mail
     public void sendForgotPasswordEmail(String email, String password) {
         final SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(email);

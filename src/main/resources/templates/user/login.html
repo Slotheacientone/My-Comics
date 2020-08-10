@@ -159,6 +159,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 				<form th:action="@{/j_spring_security_check}" method='POST'>
 					<input name="email" type="email" placeholder="Email" required=" " >
 					<input name="password" type="password" placeholder="Password" required=" " >
+					<a th:if="${#request.getParameter('error') == 'true'}" style="color: red">Wrong email or password</a>
 					<div class="forgot">
 						<a href="forgot-password.html">Forgot Password?</a>
 					</div>

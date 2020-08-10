@@ -42,15 +42,7 @@ public class UserService implements UserDetailsService {
         return user != null;
     }
 
-    public void sendForgotPasswordEmail(String email, String password) {
-        final SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(email);
-        mailMessage.setSubject("Your new password");
-        mailMessage.setFrom("<MAIL>");
-        mailMessage.setText("Your new random password: " + password);
-        System.out.println("run send forgot password");
-        mailService.sendEmail(mailMessage);
-    }
+  
 
     public void sendVerifyEmail(String email, String code) {
         final SimpleMailMessage mailMessage = new SimpleMailMessage();

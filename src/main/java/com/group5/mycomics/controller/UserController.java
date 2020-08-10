@@ -63,7 +63,19 @@ public class UserController {
     public String forgotPasswordPage() {
         return "user/forgot-password";
     }
-
+//forgot password
+    @RequestMapping(value = "/forgot-password-servlet", method = RequestMethod.POST)
+    public String forgotPassword(@RequestParam("email") String email) {
+        System.out.println(email);
+        if (userService.checkUserExist(email)) {
+            String pwd = RandomStringUtils.randomAscii(15, 25);
+            System.out.println("run controller with password: " + pwd);
+            userService.sendForgotPasswordEmail(email, pwd);
+            userService.changePassword(email, pwd);
+            return "/user/login.html";
+        }
+        return "/user/forgot-password.html";
+    }
 
     @RequestMapping(value = "/register-servlet", method = RequestMethod.POST)
     public String register(HttpSession session, @RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("name") String name) {

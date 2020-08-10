@@ -83,6 +83,7 @@ public class UserController {
         String code = RandomStringUtils.randomAlphanumeric(6);
 
         //send mail here
+        userService.sendVerifyEmail(email, code);
         System.out.println(code);
 
         maps.put(email, code);

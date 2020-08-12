@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -26,8 +25,8 @@ public class CaptchaService {
         URI verifyUri = URI.create(String.format("https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s&remoteip=%s", captchaConfig.getSecret(), response, ip));
         GoogleResponse googleResponse = restTemplate.getForObject(verifyUri, GoogleResponse.class);
         assert googleResponse != null;
-        System.out.println(googleResponse.isSuccess());
-        System.out.println(googleResponse.getScore());
+        System.out.println("success: " + googleResponse.isSuccess());
+        System.out.println("score: " + googleResponse.getScore());
         return googleResponse.isSuccess() && googleResponse.getAction().equals(action)
                 && !(googleResponse.getScore() < captchaConfig.getThreshold());
     }

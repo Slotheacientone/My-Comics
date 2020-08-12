@@ -166,17 +166,18 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         <h3 class="animated wow zoomIn" data-wow-delay=".5s">Login Form</h3>
         <div class="login-form-grids animated wow slideInUp" data-wow-delay=".5s">
             <form id="login-form" th:action="@{/login}" method='POST'>
-                <input name="email" type="email" placeholder="Email" required=" ">
+                <input name="username" type="email" placeholder="Email" required=" ">
                 <input name="password" type="password" placeholder="Password" required=" " style="margin-bottom: 10px">
                 <a th:if="${#request.getParameter('error') == 'true'}" style="color: red">Wrong email or
                     password</a><br>
+                <a th:if="${#request.getParameter('captcha-error') == 'true'}" style="color: red">You are a bot</a><br>
                 <input type="checkbox" name="remember-me"/> Remember me
                 <div class="forgot">
                     <a href="forgot-password.html">Forgot Password?</a>
                 </div>
               <!--  <input type="hidden" id="response" name="response" value="" />-->
                 <input class="g-recaptcha"
-                       data-sitekey="6LfKzrcZAAAAAMN5djSI-zR2PfwJleljtxbMkQvT"
+                       th:attr="data-sitekey=${@captchaConfig.getSite()}"
                        data-callback='onSubmit'
                        data-action='login'
                        type="submit" value="Login">

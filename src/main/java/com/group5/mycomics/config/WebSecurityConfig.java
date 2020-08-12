@@ -10,11 +10,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.sql.DataSource;
 
@@ -42,7 +40,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public RecaptchaAuthenticationFilter recaptchaAuthenticationFilter() throws Exception {
         RecaptchaAuthenticationFilter recaptchaAuthenticationFilter = new RecaptchaAuthenticationFilter();
         recaptchaAuthenticationFilter.setAuthenticationManager(authenticationManagerBean());
-       // recaptchaAuthenticationFilter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login","POST"));
         return recaptchaAuthenticationFilter;
     }
 
@@ -51,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/index.html", "/login.html", "/logout").permitAll();
         http.addFilterBefore(recaptchaAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.authorizeRequests().and().formLogin().loginPage("/login.html").defaultSuccessUrl("/index.html").failureUrl("/login.html?error=true").passwordParameter("password").usernameParameter("email").and().logout().logoutUrl("/logout").logoutSuccessUrl("/index.html");
+        http.authorizeRequests().and().formLogin().loginPage("/login.html").loginProcessingUrl("/login").defaultSuccessUrl("/index.html").and().logout().logoutUrl("/logout").logoutSuccessUrl("/index.html");
         http.authorizeRequests().and().rememberMe().tokenRepository(this.persistentTokenRepository()).tokenValiditySeconds(30 * 24 * 60 * 60); // 1 month
     }
 

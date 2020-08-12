@@ -68,34 +68,19 @@ public class UserController {
         return "user/forgot-password";
     }
 
-  /*  @RequestMapping(value = "/perform-login", method = RequestMethod.POST)
-    public void login(@RequestParam("email") String email, @RequestParam("password") String password, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String ip = request.getRemoteAddr();
-        System.out.println(ip);
-        String googleResponse = request.getParameter("g-recaptcha-response");
-        System.out.println(googleResponse);
-        boolean success = captchaService.isSuccess(googleResponse, CaptchaService.LOGIN_ACTION, ip);
-        if (success) {
-            System.out.println("success");
-            request.setAttribute("email", email);
-            request.setAttribute("password", password);
-            request.getServletContext().getRequestDispatcher("/login").forward(request,response);
-            return;
-        }
-        request.getServletContext().getRequestDispatcher("/login.html").forward(request,response);
-    }*/
 
     @RequestMapping(value = "/forgot-password-servlet", method = RequestMethod.POST)
-    public String forgotPassword(@RequestParam("email") String email) {
+    public String forgotPassword(@RequestParam("email") String email, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println(email);
         if (userService.checkUserExist(email)) {
             String pwd = RandomStringUtils.randomAscii(15, 25);
             System.out.println("run controller with password: " + pwd);
             userService.sendForgotPasswordEmail(email, pwd);
             userService.changePassword(email, pwd);
-            return "/user/login.html";
+            return "user/login.html";
         }
-        return "/user/forgot-password.html";
+        request.getServletContext().getRequestDispatcher("/forgot-password.html?error=true").forward(request, response);
+        return null;
     }
 
     @RequestMapping(value = "/register-servlet", method = RequestMethod.POST)

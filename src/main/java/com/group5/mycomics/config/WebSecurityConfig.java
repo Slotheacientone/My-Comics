@@ -1,5 +1,6 @@
 package com.group5.mycomics.config;
 
+import com.group5.mycomics.filter.RecaptchaAuthenticationFilter;
 import com.group5.mycomics.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -23,6 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
@@ -33,10 +37,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
+    @Bean
+    RecaptchaAuthenticationFilter recaptchaAuthenticationFilter() throws Exception {
+        RecaptchaAuthenticationFilter recaptchaAuthenticationFilter = new RecaptchaAuthenticationFilter();
+        recaptchaAuthenticationFilter.setAuthenticationManager(authenticationManager());
+        return recaptchaAuthenticationFilter;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/index.html", "/login.html", "/logout").permitAll();
+        http.addFilterBefore(recaptchaAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.authorizeRequests().and().formLogin().loginPage("/login.html").loginProcessingUrl("/login").defaultSuccessUrl("/index.html").failureUrl("/login.html?error=true").passwordParameter("password").usernameParameter("email").and().logout().logoutUrl("/logout").logoutSuccessUrl("/index.html");
         http.authorizeRequests().and().rememberMe().tokenRepository(this.persistentTokenRepository()).tokenValiditySeconds(30 * 24 * 60 * 60); // 1 month
     }

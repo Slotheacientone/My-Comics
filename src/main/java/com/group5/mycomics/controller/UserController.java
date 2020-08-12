@@ -68,9 +68,10 @@ public class UserController {
         return "user/forgot-password";
     }
 
-    @RequestMapping(value = "/perform-login", method = RequestMethod.POST)
+  /*  @RequestMapping(value = "/perform-login", method = RequestMethod.POST)
     public void login(@RequestParam("email") String email, @RequestParam("password") String password, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String ip = request.getRemoteAddr();
+        System.out.println(ip);
         String googleResponse = request.getParameter("g-recaptcha-response");
         System.out.println(googleResponse);
         boolean success = captchaService.isSuccess(googleResponse, CaptchaService.LOGIN_ACTION, ip);
@@ -82,7 +83,7 @@ public class UserController {
             return;
         }
         request.getServletContext().getRequestDispatcher("/login.html").forward(request,response);
-    }
+    }*/
 
     @RequestMapping(value = "/forgot-password-servlet", method = RequestMethod.POST)
     public String forgotPassword(@RequestParam("email") String email) {

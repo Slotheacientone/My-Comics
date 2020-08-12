@@ -25,6 +25,7 @@ public class CaptchaService {
     public boolean isSuccess(String response, String action, String ip) {
         URI verifyUri = URI.create(String.format("https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s&remoteip=%s", captchaConfig.getSecret(), response, ip));
         GoogleResponse googleResponse = restTemplate.getForObject(verifyUri, GoogleResponse.class);
+        assert googleResponse != null;
         System.out.println(googleResponse.isSuccess());
         System.out.println(googleResponse.getScore());
         return googleResponse.isSuccess() && googleResponse.getAction().equals(action)

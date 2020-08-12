@@ -2,6 +2,7 @@ package com.group5.mycomics.controller;
 
 import com.group5.mycomics.common.RestFB;
 import com.group5.mycomics.entity.User;
+import com.group5.mycomics.service.CaptchaService;
 import com.group5.mycomics.service.MailService;
 import com.group5.mycomics.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.Principal;
@@ -31,13 +34,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CaptchaService captchaService;
+
     HashMap<String, String> maps = new HashMap<String, String>();
 
     @RequestMapping(value = {"/", "/index.html"})
     public String index(HttpSession session, Principal principal) {
-        if(principal != null){
+        if (principal != null) {
             User user = userService.findUser(principal.getName());
-            session.setAttribute("username",user.getUsername());
+            session.setAttribute("username", user.getUsername());
         }
         return "user/index";
     }
@@ -62,6 +68,21 @@ public class UserController {
         return "user/forgot-password";
     }
 
+    @RequestMapping(value = "/perform-login", method = RequestMethod.POST)
+    public void login(@RequestParam("email") String email, @RequestParam("password") String password, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String ip = request.getRemoteAddr();
+        String googleResponse = request.getParameter("g-recaptcha-response");
+        System.out.println(googleResponse);
+        boolean success = captchaService.isSuccess(googleResponse, CaptchaService.LOGIN_ACTION, ip);
+        if (success) {
+            System.out.println("success");
+            request.setAttribute("email", email);
+            request.setAttribute("password", password);
+            request.getServletContext().getRequestDispatcher("/login").forward(request,response);
+            return;
+        }
+        request.getServletContext().getRequestDispatcher("/login.html").forward(request,response);
+    }
 
     @RequestMapping(value = "/forgot-password-servlet", method = RequestMethod.POST)
     public String forgotPassword(@RequestParam("email") String email) {
@@ -95,9 +116,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/verify-servlet", method = RequestMethod.POST)
-    public String verify(@RequestParam("verify-code") String code, @RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("name") String name,HttpSession session) {
+    public String verify(@RequestParam("verify-code") String code, @RequestParam("email") String email, @RequestParam("password") String password, @RequestParam("name") String name, HttpSession session) {
         if (!maps.get(email).contentEquals(code)) {
-            session.setAttribute("error","wrong code");
+            session.setAttribute("error", "wrong code");
             return "user/verify.html";
         }
         User user = new User(email, password, "ROLE_USER", name);
@@ -121,8 +142,8 @@ public class UserController {
             String role = "ROLE_USER";
             user = new User(email, pwd, role, userFb.getName());
             userService.addUser(user);
-        }else{
-            user = userService.findUser(userFb.getId()+"@gmail.com");
+        } else {
+            user = userService.findUser(userFb.getId() + "@gmail.com");
         }
 
         UserDetails userDetail = restFb.buildUser(user);

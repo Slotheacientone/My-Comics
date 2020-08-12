@@ -37,8 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/index.html", "/login.html", "/logout").permitAll();
-        http.authorizeRequests().and().formLogin().loginPage("/login.html").loginProcessingUrl("/j_spring_security_check").defaultSuccessUrl("/index.html").failureUrl("/login.html?error=true").passwordParameter("password").usernameParameter("email").and().logout().logoutUrl("/logout").logoutSuccessUrl("/index.html");
-
+        http.authorizeRequests().and().formLogin().loginPage("/login.html").loginProcessingUrl("/login").defaultSuccessUrl("/index.html").failureUrl("/login.html?error=true").passwordParameter("password").usernameParameter("email").and().logout().logoutUrl("/logout").logoutSuccessUrl("/index.html");
         http.authorizeRequests().and().rememberMe().tokenRepository(this.persistentTokenRepository()).tokenValiditySeconds(30 * 24 * 60 * 60); // 1 month
     }
 
